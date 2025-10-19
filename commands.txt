@@ -1,0 +1,21 @@
+# Virtual machine setup
+sudo ubuntu-drivers autoinstall
+sudo apt update && sudo apt upgrade
+sudo reboot
+
+# Download and verify Splunk
+wget -O splunk-10.0.1-c486717c322b-linux-amd64.deb "https://download.splunk.com/products/splunk/releases/10.0.1/linux/splunk-10.0.1-c486717c322b-linux-amd64.deb"
+shasum -a 512 splunk-10.0.1-c486717c322b-linux-amd64.deb
+
+# Install Splunk
+sudo dpkg -i splunk-10.0.1-c486717c322b-linux-amd64.deb
+sudo /opt/splunk/bin/splunk start --accept-license
+
+# Add log monitoring
+sudo /opt/splunk/bin/splunk add monitor /var/log
+
+# Install SSH and generate logs
+sudo apt install openssh-server
+
+# View performance
+top
