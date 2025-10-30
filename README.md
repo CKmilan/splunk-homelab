@@ -107,8 +107,26 @@ I used this project to practice troubleshooting, system monitoring, and creating
 ## Dashboard detection examples
 
 - **Failed SSH logins**  
+ ```index=main sourcetype=linux_secure "Failed password"
+| rex "from\s(?<src_ip>[0-9a-fA-F\.:]+)"
+| stats count by src_ip
+| sort - count
+```  
+
 - **Successful SSH logins**  
-- **Potential brute-force attempts**
+```
+index=main sourcetype=linux_secure "Accepted password"
+| rex "for\s(?<user>\S+)"
+| stats count by user
+| sort - count
+```  
+
+- **Potential brute-force attempts**  
+```
+index=main sourcetype=linux_secure "Failed password"
+| rex "from\s(?<src_ip>[0-9a-fA-F\.:]+)"
+| timechart span=5m count by src_ip
+```  
 
 ---
 
