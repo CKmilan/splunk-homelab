@@ -100,7 +100,7 @@ I used this project to practice troubleshooting, system monitoring, and creating
 
 ![Dashboard creation](screenshots/8create_new_dashboard.png)
 ![Dashboard JSON settings](screenshots/9refresh_60sec.png)  
-![SSH Security dashboard](screenshots/10overview.png)  - **Failed SSH logins**
+![SSH Security dashboard](screenshots/10overview.PNG)  - **Failed SSH logins**
  ```index=main sourcetype=linux_secure "Failed password"
 | rex "from\s(?<src_ip>[0-9a-fA-F\.:]+)"
 | stats count by src_ip
