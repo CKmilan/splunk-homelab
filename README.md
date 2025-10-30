@@ -1,15 +1,15 @@
 # Splunk Home-Lab
 
-This repository documents my **Splunk home-lab project**, created to demonstrate my ability to install, configure, and use Splunk for basic log monitoring and security analysis.  
+This repository documents my **Splunk home-lab project**, created to demonstrate  my ability to install, configure, and use Splunk for basic log monitoring and  security analysis.  
 It was built and tested on **Ubuntu (VirtualBox)**.
 
 ---
 
 ## Project overview
 
-The goal was to set up Splunk inside a VirtualBox Ubuntu VM, collect system logs from `/var/log`, and visualize SSH login activity on a custom dashboard.
+The goal was to set up Splunk inside a VirtualBox Ubuntu VM, collect system logs  from `/var/log`, and visualize SSH login activity on a custom dashboard.
 
-I used this project to practice troubleshooting, system monitoring, and creating Splunk searches and dashboards.
+I used this project to practice troubleshooting, system monitoring, and creating  Splunk searches and dashboards.
 
 ---
 
@@ -17,9 +17,12 @@ I used this project to practice troubleshooting, system monitoring, and creating
 
 ### 1️. Virtual machine setup
 
-- Created an Ubuntu VM in **VirtualBox**
+- Created an Ubuntu VM in **VirtualBox**  
 
-- Installed drivers:
+![VirtualBox settings](screenshots/1VM_settings.png)
+![New Linux VM](screenshots/2new_linuxVM.png)
+
+- Installed drivers  
   `sudo ubuntu-drivers autoinstall`
 
 - Updated packages  
@@ -28,21 +31,18 @@ I used this project to practice troubleshooting, system monitoring, and creating
 - Rebooted the machine  
   `sudo reboot`
 
-![VirtualBox settings](screenshots/1VM_settings.png)
-![New Linux VM](screenshots/2new_linuxVM.png)
-
 ---
 
 ### 2️. Splunk installation
 
 - Downloaded Splunk  
 
-`wget -O splunk-10.0.1-c486717c322b-linux-amd64.deb`
+`wget -O splunk-10.0.1-c486717c322b-linux-amd64.deb`  
 "https://download.splunk.com/products/splunk/releases/10.0.1/linux/splunk-10.0.1-c486717c322b-linux-amd64.deb"
 
 
 - Verified file integrity  
-  `shasum -a 512 splunk-10.0.1-c486717c322b-linux-amd64.deb`
+  `shasum -a 512 splunk-10.0.1-c486717c322b-linux-amd64.deb`  
 
 ![Compare chechsum](screenshots/3compare_hash.png)
 
@@ -53,7 +53,7 @@ I used this project to practice troubleshooting, system monitoring, and creating
 ```
 
 - Created an admin account and logged in at  
-  http://127.0.0.1:8000
+  http://127.0.0.1:8000  
 
 ![Splunk login page](screenshots/4splunk_login.png)
 
@@ -91,16 +91,16 @@ I used this project to practice troubleshooting, system monitoring, and creating
 ### 6️. SSH logging and dashboard
 
 - Installed SSH server  
-`sudo apt install openssh-server`
+`sudo apt install openssh-server`  
 
 - Generated login attempts (both failed and successful)  
 - Created a dashboard named “SSH Security Overview”  
 - Added multiple searches as panels  
-- Set dashboard refresh to 60 seconds (in JSON settings)
+- Set dashboard refresh to 60 seconds (in JSON settings)  
 
 ![Dashboard creation](screenshots/8create_new_dashboard.png)
-![Dashboard JSON settings](screenshots/9refresh_60sec.png)
-![SSH Security dashboard](screenshots/10SSH_Sec_overview.png)
+![Dashboard JSON settings](screenshots/9refresh_60sec.png)  
+![SSH Security dashboard](screenshots/10SSH_Sec_overview.png)  
 
 ---
 
