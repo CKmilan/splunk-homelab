@@ -100,35 +100,117 @@ I used this project to practice troubleshooting, system monitoring, and creating
 
 ![Dashboard creation](screenshots/8create_new_dashboard.png)
 ![Dashboard JSON settings](screenshots/9refresh_60sec.png)  
-![SSH Security dashboard](screenshots/10overview.PNG)  - **Failed SSH logins**
+![SSH Security dashboard](screenshots/10overview.PNG)  
+
+- **Failed SSH logins**  
  ```index=main sourcetype=linux_secure "Failed password"
 | rex "from\s(?<src_ip>[0-9a-fA-F\.:]+)"
 | stats count by src_ip
 | sort - count
 ```  
 
-- **Successful SSH logins**
+- **Successful SSH logins**  
 ```
 index=main sourcetype=linux_secure "Accepted password"
 | rex "for\s(?<user>\S+)"
 | stats count by user
 | sort - count
-```
+```  
 
-- **Potential brute-force attempts**
+- **Potential brute-force attempts**  
 ```
 index=main sourcetype=linux_secure "Failed password"
 | rex "from\s(?<src_ip>[0-9a-fA-F\.:]+)"
 | timechart span=5m count by src_ip
 ```  
 
+---  
+  
+## After these I switched to Windows VM anddownloaded the BOTS V3 Dataset and  
+## unziped the files into  
+`$SPLUNK_HOME/etc/apps` 
 
 ---
 
-## Dashboard detection examples
+### 1. Downloading the dataset  
 
+![BOTSV3](screenshots/11-botsv3.png)  
 
 ---
+
+### 2. Making sure botsv3 is imported properly with  
+`index=botsv3`  
+
+![First search](screenshots/12-botsv3-logs.png)
+
+---
+
+### 3. Next I searched for errors with a host named serverless  
+### and excluded some AWS audit logs with the search command:  
+`index=botsv3 error host=serverless NOT sourcetype="aws:rds:audit"`  
+
+![Excluded AWS logs](screenshots/13-excluded-aws.png)  
+
+---
+
+### 4. Now I created tables using the search command:  
+```
+index=botsv3 sourcetype=WinEventLog:Security (EventCode=4624 OR EventCode=4625)  
+| transaction host maxpause=30  
+| table _time Account_Name host EventCode duration  
+```  
+This means:
+- Search in botsv3 databse
+- in security logs
+- successful (4624) and failed (4625) logins
+- group the events from the same host into one transaction
+- if the time gap between them is less than 30 minutes
+- then create the tables: _time, Account_Name, host, EventCode, duration  
+
+![Create tables](screenshots/14-creating-tables.png)  
+
+---
+
+### 5. Next I created dashboards using the following commands:  
+
+`index=botsv3 | timechart count by status_code`  
+
+- This search creates a time-based chart showing how values change over time
+- Counts how many events occurred
+- Groups events by their status code  
+
+  
+```
+index=botsv3 sourcetype=WinEventLog:Security EventCode=4624  
+| timechart count by host limit=5
+```  
+
+- This search filters Security events only
+- Searches for successful security logons (4624)
+- Creats a time-based chart showing the top 5 hosts with the most events  
+
+![Dashboard](screenshots/16-dashboard.png)  
+
+---
+
+### 6. For the last step I created an alert that notices mass file modifications  
+
+```
+index=botsv3 sourcetype=file_modifications  
+| stats  count by file_path, user  
+| where count > 50
+```  
+
+- This filters event based on file modification
+- Counts how many times each user modified each file
+- Shows file_path, user, count
+- where the file was modified more than 50 times  
+
+![Alert](screenshots/17-alert.png)  
+
+This alert triggers mass file modifications, ransomware attack or scripting activites.  
+
+---  
 
 ## Lessons learned
 
@@ -136,10 +218,13 @@ index=main sourcetype=linux_secure "Failed password"
 - Monitoring `/var/log` is a good way to practice analyzing system behavior.  
 - Troubleshooting VM resources and display issues builds practical system administration skills.  
 - Creating dashboards helps visualize and understand real-time log data.
+- Using real-world logs for real-world experience
 
 This home-lab shows I can:
-- Install and configure Splunk on Linux
+- Install and configure Splunk on Linux and Windows
 - Collect and analyze logs
 - Troubleshoot performance problems
+- Create alerts
 - Build dashboards for security visibility
+
 
