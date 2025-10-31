@@ -101,6 +101,8 @@ I used this project to practice troubleshooting, system monitoring, and creating
 ![Dashboard creation](screenshots/8create_new_dashboard.png)
 ![Dashboard JSON settings](screenshots/9refresh_60sec.png)  
 ![SSH Security dashboard](screenshots/10overview.PNG)  
+  
+
 
 - **Failed SSH logins**  
  ```index=main sourcetype=linux_secure "Failed password"
@@ -111,6 +113,8 @@ I used this project to practice troubleshooting, system monitoring, and creating
 - Searches all events contain "Failed password"
 - Rex command extracts the IP address
 - Counts how many failed logins are from each IP  
+  
+
 
 - **Successful SSH logins**  
 ```
@@ -122,6 +126,8 @@ index=main sourcetype=linux_secure "Accepted password"
 - Searches all events cointain "Accepted password"
 - Rex searches the usernames
 - Counts the number of successful logins  
+  
+
 
 - **Potential brute-force attempts**  
 ```
@@ -132,6 +138,8 @@ index=main sourcetype=linux_secure "Failed password"
 - Extracts the failed logins and source IPs
 - Uses timechart to create a graph of failed logins per IP in 5 minute intervals
 ---  
+  
+ 
   
 ## After these I switched to Windows VM  
 
