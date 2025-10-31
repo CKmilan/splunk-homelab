@@ -93,13 +93,16 @@ I used this project to practice troubleshooting, system monitoring, and creating
 - Installed SSH server  
 `sudo apt install openssh-server`  
 
-- Generated login attempts (both failed and successful)  
 - Created a dashboard named “SSH Security Overview”  
 - Added multiple searches as panels  
-- Set dashboard refresh to 60 seconds (in JSON settings)  
+- Set dashboard refresh to 60 seconds (in JSON settings)
 
 ![Dashboard creation](screenshots/8create_new_dashboard.png)
 ![Dashboard JSON settings](screenshots/9refresh_60sec.png)  
+  
+  - Generated login attempts (both failed and successful)  
+
+  
 ![SSH Security dashboard](screenshots/10overview.PNG)  
   
 
@@ -137,9 +140,8 @@ index=main sourcetype=linux_secure "Failed password"
 ```  
 - Extracts the failed logins and source IPs
 - Uses timechart to create a graph of failed logins per IP in 5 minute intervals
----  
   
- 
+---  
   
 ## After these I switched to Windows VM  
 
