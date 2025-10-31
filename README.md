@@ -108,6 +108,9 @@ I used this project to practice troubleshooting, system monitoring, and creating
 | stats count by src_ip
 | sort - count
 ```  
+- Searches all events contain "Failed password"
+- Rex command extracts the IP address
+- Counts how many failed logins are from each IP  
 
 - **Successful SSH logins**  
 ```
@@ -116,6 +119,9 @@ index=main sourcetype=linux_secure "Accepted password"
 | stats count by user
 | sort - count
 ```  
+- Searches all events cointain "Accepted password"
+- Rex searches the usernames
+- Counts the number of successful logins  
 
 - **Potential brute-force attempts**  
 ```
@@ -123,11 +129,13 @@ index=main sourcetype=linux_secure "Failed password"
 | rex "from\s(?<src_ip>[0-9a-fA-F\.:]+)"
 | timechart span=5m count by src_ip
 ```  
-
+- Extracts the failed logins and source IPs
+- Uses timechart to create a graph of failed logins per IP in 5 minute intervals
 ---  
   
-## After these I switched to Windows VM anddownloaded the BOTS V3 Dataset and  
-## unziped the files into  
+## After these I switched to Windows VM  
+
+Downloaded the BOTS V3 Dataset and unziped the files into:  
 `$SPLUNK_HOME/etc/apps` 
 
 ---
@@ -145,15 +153,16 @@ index=main sourcetype=linux_secure "Failed password"
 
 ---
 
-### 3. Next I searched for errors with a host named serverless  
-### and excluded some AWS audit logs with the search command:  
+### 3. Trying some searches  
+Next I searched for errors with a host named serverless  
+and excluded some AWS audit logs with the search command:  
 `index=botsv3 error host=serverless NOT sourcetype="aws:rds:audit"`  
 
 ![Excluded AWS logs](screenshots/13-excluded-aws.png)  
 
 ---
 
-### 4. Now I created tables using the search command:  
+### 4. Creating tables using the search command:  
 ```
 index=botsv3 sourcetype=WinEventLog:Security (EventCode=4624 OR EventCode=4625)  
 | transaction host maxpause=30  
@@ -171,11 +180,11 @@ This means:
 
 ---
 
-### 5. Next I created dashboards using the following commands:  
+### 5. Creating dashboards using the following commands:  
 
 `index=botsv3 | timechart count by status_code`  
 
-- This search creates a time-based chart showing how values change over time
+- Creates a time-based chart showing how values change over time
 - Counts how many events occurred
 - Groups events by their status code  
 
@@ -185,7 +194,7 @@ index=botsv3 sourcetype=WinEventLog:Security EventCode=4624
 | timechart count by host limit=5
 ```  
 
-- This search filters Security events only
+- Filters Security events only
 - Searches for successful security logons (4624)
 - Creats a time-based chart showing the top 5 hosts with the most events  
 
@@ -201,7 +210,7 @@ index=botsv3 sourcetype=file_modifications
 | where count > 50
 ```  
 
-- This filters event based on file modification
+- Filters event based on file modification
 - Counts how many times each user modified each file
 - Shows file_path, user, count
 - where the file was modified more than 50 times  
